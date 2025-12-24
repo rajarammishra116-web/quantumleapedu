@@ -1,0 +1,12 @@
+This is a placeholder file.
+
+To use the Quantum Leap platform:
+1. Add your PDF files to the public/assets/pdfs/ folder
+2. Use the Admin Console (gear icon in bottom-right) to generate the configuration
+3. Copy the generated JSON and paste it into src/data/contentData.ts
+4. The PDFs will automatically appear in the Study Materials section
+
+Example PDF filenames you can use:
+- motion_ch1.pdf
+- number_systems.pdf
+- chemical_reactions.pdf
