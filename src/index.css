@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---------- Custom reusable classes ---------- */
+
+.input {
+  @apply border rounded px-3 py-2 w-full;
+}
+
+.btn-primary {
+  @apply bg-black text-white px-4 py-2 rounded hover:opacity-90 disabled:opacity-50;
+}
