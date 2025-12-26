@@ -1,4 +1,5 @@
-import { Mail } from "lucide-react";
+import { useState } from "react";
+import { Mail, Menu, X } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Page } from "../App";
 
@@ -10,6 +11,7 @@ interface HeaderProps {
 export default function Header({ currentPage, onNavigate }: HeaderProps) {
   const { data, loading } = useSiteSettings();
   const brand = data?.brand;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (loading) {
     return <div className="h-16 bg-white shadow-sm" />;
@@ -24,6 +26,11 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     { name: "Simulations", id: "simulations" },
   ];
 
+  const handleNavigate = (page: Page) => {
+    onNavigate(page);
+    setMenuOpen(false); // close mobile menu
+  };
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,7 +38,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
 
           {/* Brand */}
           <button
-            onClick={() => onNavigate("home")}
+            onClick={() => handleNavigate("home")}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
             {brand?.logoUrl && (
@@ -41,7 +48,6 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 className="h-8 w-auto"
               />
             )}
-
             <div className="leading-tight text-left">
               <div className="text-lg font-bold text-[#1A233A]">
                 {brand?.name}
@@ -52,12 +58,12 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             </div>
           </button>
 
-          {/* Navigation */}
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => onNavigate(item.id)}
+                onClick={() => handleNavigate(item.id)}
                 className={`text-sm font-medium transition-colors ${
                   currentPage === item.id
                     ? "text-[#1A233A]"
@@ -69,19 +75,58 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Contact */}
+          {/* Desktop Contact */}
           <a
             href={gmailLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#1A233A] text-white rounded-lg hover:bg-opacity-90 transition-all text-sm font-medium"
+            className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#1A233A] text-white rounded-lg hover:bg-opacity-90 transition-all text-sm font-medium"
           >
             <Mail size={16} />
             Contact Us
           </a>
 
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-[#1A233A]"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t shadow-sm">
+          <nav className="flex flex-col px-4 py-4 space-y-4">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNavigate(item.id)}
+                className={`text-left text-base font-medium ${
+                  currentPage === item.id
+                    ? "text-[#1A233A]"
+                    : "text-gray-700"
+                }`}
+              >
+                {item.name}
+              </button>
+            ))}
+
+            <a
+              href={gmailLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[#1A233A] font-medium pt-2 border-t"
+            >
+              <Mail size={16} />
+              Contact Us
+            </a>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
