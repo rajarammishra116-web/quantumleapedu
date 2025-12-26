@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Settings } from "lucide-react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
 import AdminLogin from "./AdminLogin";
@@ -9,16 +9,15 @@ import HomepageAdmin from "./HomepageAdmin";
 import SocialAdmin from "./SocialAdmin";
 import StudyMaterialAdmin from "./StudyMaterialAdmin";
 import SimulationAdmin from "./SimulationAdmin";
-import LegalAdmin from "./LegalAdmin"; // ✅ ADD THIS
+import LegalAdmin from "./LegalAdmin";
 
-// ✅ ALL ADMIN TABS
 const tabs = [
   "Brand",
   "Homepage",
   "Social",
   "Study Materials",
   "Simulations",
-  "Legal", // ✅ ADD THIS
+  "Legal",
 ] as const;
 
 export default function AdminDashboard() {
@@ -26,29 +25,41 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] =
     useState<typeof tabs[number]>("Brand");
 
-  // 🔐 Single source of truth for auth
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser); // User | null
+      setUser(firebaseUser);
     });
     return unsub;
   }, []);
 
-  // Floating settings button
+  /* ============================
+     SECRET ADMIN TRIGGER BUTTON
+     ============================ */
   if (!isOpen) {
     return (
-      <button
+      <div
+        className="
+          fixed bottom-4 right-4 z-50
+          w-10 h-10
+          opacity-0 hover:opacity-100
+          transition-opacity duration-300
+          cursor-pointer
+        "
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 p-3 bg-gray-800 text-white rounded-full shadow-lg opacity-30 hover:opacity-100 z-50"
         aria-label="Open Admin Dashboard"
       >
-        <Settings size={24} />
-      </button>
+        <div className="w-full h-full rounded-full bg-gray-800 text-white flex items-center justify-center shadow-lg">
+          <Settings size={18} />
+        </div>
+      </div>
     );
   }
 
+  /* ============================
+     ADMIN DASHBOARD MODAL
+     ============================ */
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
       <div className="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -56,26 +67,35 @@ export default function AdminDashboard() {
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <h2 className="text-xl font-bold">Admin Dashboard</h2>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-black"
-          >
-            ✕
-          </button>
+
+          <div className="flex items-center gap-4">
+            {user && (
+              <button
+                onClick={() => signOut(auth)}
+                className="text-sm text-red-600 hover:underline"
+              >
+                Logout
+              </button>
+            )}
+
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-500 hover:text-black"
+              aria-label="Close admin dashboard"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
-
-          {/* Auth loading */}
           {user === undefined && (
             <p className="text-gray-500">Checking authentication…</p>
           )}
 
-          {/* Not logged in */}
           {user === null && <AdminLogin />}
 
-          {/* Logged in */}
           {user && (
             <>
               {/* Tabs */}
@@ -101,7 +121,7 @@ export default function AdminDashboard() {
               {activeTab === "Social" && <SocialAdmin />}
               {activeTab === "Study Materials" && <StudyMaterialAdmin />}
               {activeTab === "Simulations" && <SimulationAdmin />}
-              {activeTab === "Legal" && <LegalAdmin />} {/* ✅ */}
+              {activeTab === "Legal" && <LegalAdmin />}
             </>
           )}
         </div>

@@ -1,70 +1,9 @@
-import { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import HomePage from "./components/HomePage";
-import StudyMaterials from "./pages/StudyMaterials";
-import Simulations from "./pages/Simulations";
-import AdminDashboard from "./components/admin/AdminDashboard";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Disclaimer from "./pages/Disclaimer";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-function App() {
-  const [currentPage, setCurrentPage] = useState("home");
-
-  // Central navigation handler (syncs with browser history)
-  const navigate = (page: string) => {
-    window.history.pushState(
-      { page },
-      "",
-      page === "home" ? "/" : `/${page}`
-    );
-    setCurrentPage(page);
-  };
-
-  // Handle browser / mobile back button
-  useEffect(() => {
-    const handlePopState = (event: PopStateEvent) => {
-      if (event.state?.page) {
-        setCurrentPage(event.state.page);
-      } else {
-        setCurrentPage("home");
-      }
-    };
-
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case "home":
-        return <HomePage onNavigate={navigate} />;
-
-      case "materials":
-        return <StudyMaterials />;
-
-      case "simulations":
-        return <Simulations />;
-
-      case "privacy":
-        return <PrivacyPolicy />;
-
-      case "disclaimer":
-        return <Disclaimer />;
-
-      default:
-        return <HomePage onNavigate={navigate} />;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-white">
-      <Header currentPage={currentPage} onNavigate={navigate} />
-      <main>{renderPage()}</main>
-      <Footer onNavigate={navigate} />
-      <AdminDashboard />
-    </div>
-  );
+/* Optional global styles */
+html, body {
+  margin: 0;
+  padding: 0;
 }
-
-export default App;
