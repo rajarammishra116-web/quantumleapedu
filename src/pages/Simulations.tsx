@@ -49,99 +49,104 @@ export default function Simulations() {
       : [];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Simulations</h1>
+    /* 🔑 FIX: padding-top prevents sticky header overlap */
+    <div className="min-h-screen pt-20 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto space-y-6">
 
-      {/* Filters */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <select
-          className="input"
-          value={filters.board}
-          onChange={(e) =>
-            setFilters({ ...filters, board: e.target.value })
-          }
-        >
-          <option value="">Select Board</option>
-          {BOARDS.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </select>
+        <h1 className="text-2xl font-bold">Simulations</h1>
 
-        <select
-          className="input"
-          value={filters.class}
-          onChange={(e) =>
-            setFilters({ ...filters, class: e.target.value })
-          }
-        >
-          <option value="">Select Class</option>
-          {CLASSES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-
-        <select
-          className="input"
-          value={filters.subject}
-          onChange={(e) =>
-            setFilters({ ...filters, subject: e.target.value })
-          }
-        >
-          <option value="">Select Subject</option>
-          {SUBJECTS.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Guidance */}
-      {(!filters.board || !filters.class || !filters.subject) && (
-        <p className="text-gray-500">
-          Please select Board, Class, and Subject to view simulations.
-        </p>
-      )}
-
-      {/* Results */}
-      <div className="space-y-4">
-        {filters.board &&
-          filters.class &&
-          filters.subject &&
-          filteredItems.length === 0 && (
-            <p className="text-gray-500">
-              No simulations found for the selected options.
-            </p>
-          )}
-
-        {filteredItems.map((s) => (
-          <div
-            key={s.id}
-            className="border rounded p-4 flex justify-between items-start"
+        {/* Filters */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <select
+            className="input"
+            value={filters.board}
+            onChange={(e) =>
+              setFilters({ ...filters, board: e.target.value })
+            }
           >
-            <div>
-              <p className="font-semibold">{s.topic}</p>
-              {s.description && (
-                <p className="text-sm text-gray-600 mt-1">
-                  {s.description}
-                </p>
-              )}
-            </div>
+            <option value="">Select Board</option>
+            {BOARDS.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
 
-            <a
-              href={s.simulationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline text-sm"
+          <select
+            className="input"
+            value={filters.class}
+            onChange={(e) =>
+              setFilters({ ...filters, class: e.target.value })
+            }
+          >
+            <option value="">Select Class</option>
+            {CLASSES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="input"
+            value={filters.subject}
+            onChange={(e) =>
+              setFilters({ ...filters, subject: e.target.value })
+            }
+          >
+            <option value="">Select Subject</option>
+            {SUBJECTS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Guidance */}
+        {(!filters.board || !filters.class || !filters.subject) && (
+          <p className="text-gray-500">
+            Please select Board, Class, and Subject to view simulations.
+          </p>
+        )}
+
+        {/* Results */}
+        <div className="space-y-4">
+          {filters.board &&
+            filters.class &&
+            filters.subject &&
+            filteredItems.length === 0 && (
+              <p className="text-gray-500">
+                No simulations found for the selected options.
+              </p>
+            )}
+
+          {filteredItems.map((s) => (
+            <div
+              key={s.id}
+              className="border rounded-lg p-4 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3"
             >
-              Open Simulation
-            </a>
-          </div>
-        ))}
+              <div>
+                <p className="font-semibold">{s.topic}</p>
+                {s.description && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    {s.description}
+                  </p>
+                )}
+              </div>
+
+              <a
+                href={s.simulationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline text-sm whitespace-nowrap"
+              >
+                Open Simulation
+              </a>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   );
