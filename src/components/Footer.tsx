@@ -1,8 +1,9 @@
 import { Instagram, Send, Youtube, Mail } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Page } from "../App";
 
 interface FooterProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: Page) => void;
 }
 
 export default function Footer({ onNavigate }: FooterProps) {
@@ -72,34 +73,17 @@ export default function Footer({ onNavigate }: FooterProps) {
 
             <div className="flex gap-4 mb-4">
               {data?.instagram && (
-                <a
-                  href={data.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20"
-                >
+                <a href={data.instagram} target="_blank" rel="noopener noreferrer">
                   <Instagram size={20} />
                 </a>
               )}
-
               {data?.telegram && (
-                <a
-                  href={data.telegram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20"
-                >
+                <a href={data.telegram} target="_blank" rel="noopener noreferrer">
                   <Send size={20} />
                 </a>
               )}
-
               {data?.youtube && (
-                <a
-                  href={data.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20"
-                >
+                <a href={data.youtube} target="_blank" rel="noopener noreferrer">
                   <Youtube size={20} />
                 </a>
               )}
@@ -112,17 +96,12 @@ export default function Footer({ onNavigate }: FooterProps) {
                   {data.email}
                 </div>
               )}
-
               {data?.phone && <div>📞 {data.phone}</div>}
-
-              {data?.address && (
-                <div className="leading-snug">📍 {data.address}</div>
-              )}
+              {data?.address && <div>📍 {data.address}</div>}
             </div>
           </div>
         </div>
 
-        {/* Legal */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-300">
           © 2025 {brand?.legalName}. All rights reserved.
         </div>

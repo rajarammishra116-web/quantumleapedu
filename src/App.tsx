@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./components/HomePage";
@@ -8,36 +8,57 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Disclaimer from "./pages/Disclaimer";
 
+export type Page =
+  | "home"
+  | "materials"
+  | "simulations"
+  | "privacy"
+  | "disclaimer";
+
 function App() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState<Page>("home");
+
+  const navigate = (page: Page) => {
+    window.history.pushState(
+      { page },
+      "",
+      page === "home" ? "/" : `/${page}`
+    );
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state as { page?: Page } | null;
+      setCurrentPage(state?.page ?? "home");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {
       case "home":
-        return <HomePage onNavigate={setCurrentPage} />;
-
+        return <HomePage onNavigate={navigate} />;
       case "materials":
         return <StudyMaterials />;
-
       case "simulations":
         return <Simulations />;
-
       case "privacy":
         return <PrivacyPolicy />;
-
       case "disclaimer":
         return <Disclaimer />;
-
       default:
-        return <HomePage onNavigate={setCurrentPage} />;
+        return <HomePage onNavigate={navigate} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Header currentPage={currentPage} onNavigate={navigate} />
       <main>{renderPage()}</main>
-      <Footer onNavigate={setCurrentPage} />
+      <Footer onNavigate={navigate} />
       <AdminDashboard />
     </div>
   );

@@ -1,9 +1,10 @@
 import { Mail } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Page } from "../App";
 
 interface HeaderProps {
-  currentPage: string;
-  onNavigate: (page: string) => void;
+  currentPage: Page;
+  onNavigate: (page: Page) => void;
 }
 
 export default function Header({ currentPage, onNavigate }: HeaderProps) {
@@ -14,11 +15,10 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     return <div className="h-16 bg-white shadow-sm" />;
   }
 
-  // ✅ Gmail compose link (PART C)
   const gmailLink =
     "https://mail.google.com/mail/?view=cm&fs=1&to=quantumleap.org@zohomail.in";
 
-  const navItems = [
+  const navItems: { name: string; id: Page }[] = [
     { name: "Home", id: "home" },
     { name: "Study Materials", id: "materials" },
     { name: "Simulations", id: "simulations" },
@@ -69,7 +69,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Contact Us — Gmail draft */}
+          {/* Contact */}
           <a
             href={gmailLink}
             target="_blank"
