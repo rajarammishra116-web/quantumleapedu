@@ -7,11 +7,13 @@ import Simulations from "./pages/Simulations";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Disclaimer from "./pages/Disclaimer";
+import Courses from "./pages/Courses"; // ✅ NEW
 
 export type Page =
   | "home"
   | "materials"
   | "simulations"
+  | "courses"      // ✅ NEW
   | "privacy"
   | "disclaimer";
 
@@ -45,6 +47,8 @@ function App() {
         return <StudyMaterials />;
       case "simulations":
         return <Simulations />;
+      case "courses":            // ✅ NEW
+        return <Courses />;
       case "privacy":
         return <PrivacyPolicy />;
       case "disclaimer":
