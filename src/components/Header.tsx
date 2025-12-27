@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Page } from "../App";
 
@@ -17,18 +17,16 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     return <div className="h-16 bg-white shadow-sm" />;
   }
 
-  const gmailLink =
-    "https://mail.google.com/mail/?view=cm&fs=1&to=quantumleap.org@zohomail.in";
-
   const navItems: { name: string; id: Page }[] = [
     { name: "Home", id: "home" },
     { name: "Study Materials", id: "materials" },
     { name: "Simulations", id: "simulations" },
+    { name: "Courses", id: "courses" }, // ✅ NEW
   ];
 
   const handleNavigate = (page: Page) => {
     onNavigate(page);
-    setMenuOpen(false); // close mobile menu
+    setMenuOpen(false);
   };
 
   return (
@@ -75,17 +73,6 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Desktop Contact */}
-          <a
-            href={gmailLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#1A233A] text-white rounded-lg hover:bg-opacity-90 transition-all text-sm font-medium"
-          >
-            <Mail size={16} />
-            Contact Us
-          </a>
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-[#1A233A]"
@@ -114,16 +101,6 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 {item.name}
               </button>
             ))}
-
-            <a
-              href={gmailLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[#1A233A] font-medium pt-2 border-t"
-            >
-              <Mail size={16} />
-              Contact Us
-            </a>
           </nav>
         </div>
       )}
