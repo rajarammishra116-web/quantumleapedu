@@ -10,6 +10,7 @@ import SocialAdmin from "./SocialAdmin";
 import StudyMaterialAdmin from "./StudyMaterialAdmin";
 import SimulationAdmin from "./SimulationAdmin";
 import LegalAdmin from "./LegalAdmin";
+import CoursesAdmin from "./CoursesAdmin";
 
 const tabs = [
   "Brand",
@@ -17,6 +18,7 @@ const tabs = [
   "Social",
   "Study Materials",
   "Simulations",
+  "Courses",      // ✅ NEW
   "Legal",
 ] as const;
 
@@ -122,6 +124,7 @@ export default function AdminDashboard() {
               {activeTab === "Study Materials" && <StudyMaterialAdmin />}
               {activeTab === "Simulations" && <SimulationAdmin />}
               {activeTab === "Legal" && <LegalAdmin />}
+              {activeTab === "Courses" && <CoursesAdmin />}
             </>
           )}
         </div>
