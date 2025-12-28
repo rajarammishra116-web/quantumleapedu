@@ -8,7 +8,8 @@ export const contentData: ContentData = {
   },
   about: {
     title: "Our Story",
-    text: "We believe that true learning happens when you bridge the gap between theory and reality. We combine the visual power of interactive technology with the structure of classical pedagogy to create a learning environment where curiosity leads to mastery."
+    shortText: "Born from a shared frustration with static textbooks and one-size-fits-all schooling, we started as a small group of educators and technologists with a simple question: \"What if learning felt less like a chore and more like a discovery?\" We realized that the traditional education system often prioritizes rote memorization over genuine understanding, leaving countless brilliant minds disengaged and uninspired.",
+    longText: "Born from a shared frustration with static textbooks and one-size-fits-all schooling, we started as a small group of educators and technologists with a simple question: \"What if learning felt less like a chore and more like a discovery?\" We realized that the traditional education system often prioritizes rote memorization over genuine understanding, leaving countless brilliant minds disengaged and uninspired. \n\n We are a new, passionate company, but our vision is bold. We are building the educational platform we wish we had growing up—one that adapts to you, moves at your speed, and turns abstract concepts into tangible experiences. We aren't just creating another study app; we are crafting a new era of learning where curiosity leads the way. We believe that every student has a \"quantum leap\" in them waiting to happen, and we are here to provide the launchpad."
   },
   studyMaterials: [
     {

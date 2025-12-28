@@ -2,17 +2,18 @@ import { ArrowRight, BookOpen, Sparkles, Telescope } from "lucide-react";
 import { contentData } from "../data/contentData";
 import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
+import { Page } from "../App";
 
-export default function HomePage() {
+interface HomePageProps {
+  onNavigate: (page: Page) => void; // Kept for interface compatibility
+}
+
+export default function HomePage({ }: HomePageProps) {
   const { hero, about } = contentData;
 
   const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   const stagger: Variants = {
@@ -23,6 +24,8 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* HERO SECTION */}
       <section className="relative pt-32 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Decorative Blobs moved to Layout.tsx, but checks if specific ones are needed here */}
+
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial="hidden"
@@ -50,10 +53,7 @@ export default function HomePage() {
               {hero.subheadline}
             </motion.p>
 
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-wrap justify-center gap-6 items-center"
-            >
+            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-6 items-center">
               <Link
                 to="/materials"
                 className="group px-8 py-4 bg-primary text-white rounded-full font-semibold text-lg hover:bg-primary-hover hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2"
@@ -67,7 +67,7 @@ export default function HomePage() {
             </motion.div>
           </motion.div>
 
-          {/* FEATURES */}
+          {/* FEATURES / CARDS */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export default function HomePage() {
               icon={<Telescope className="text-white" size={28} />}
               bg="bg-gradient-to-br from-purple-500 to-purple-600"
               title="Interactive Simulations"
-              description="Visualize and interact with scientific concepts using physics and math simulations."
+              description="Don't just read—visualize and interact with scientific concepts using our physics and math simulations."
               delay={0.1}
             />
 
@@ -95,8 +95,15 @@ export default function HomePage() {
               icon={<Sparkles className="text-white" size={28} />}
               bg="bg-gradient-to-br from-teal-500 to-teal-600"
               title="Structured Pedagogy"
-              description="Learning paths designed for conceptual clarity and long-term retention."
+              description="Our learning paths are designed with modern scientific principles to maximize retention and understanding."
               delay={0.2}
+            />
+            <FeatureCard
+              icon={<ArrowRight className="text-white" size={28} />}
+              bg="bg-gradient-to-br from-slate-700 to-slate-800"
+              title="And Much More..."
+              description="Join us and discover a world of knowledge waiting for you."
+              delay={0.3}
             />
           </motion.div>
         </div>
@@ -104,7 +111,7 @@ export default function HomePage() {
 
       {/* ABOUT PREVIEW */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white relative">
-        <div className="absolute inset-0 bg-slate-50/50 skew-y-3 origin-bottom-left -z-10" />
+        <div className="absolute inset-0 bg-slate-50/50 skew-y-3 transform origin-bottom-left -z-10 h-full w-full"></div>
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -112,19 +119,14 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-8">
+            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-8 tracking-tight">
               {about.title}
             </h2>
             <p className="text-lg sm:text-xl text-slate-600 leading-relaxed">
               {about.shortText}
             </p>
             <div className="mt-12">
-              <Link
-                to="/about"
-                className="text-primary font-semibold hover:text-primary-hover hover:underline underline-offset-4"
-              >
-                Learn more →
-              </Link>
+              <Link to="/about" className="text-primary font-semibold hover:text-primary-hover hover:underline underline-offset-4">Learn more &rarr;</Link>
             </div>
           </motion.div>
         </div>
@@ -138,7 +140,7 @@ function FeatureCard({
   bg,
   title,
   description,
-  delay,
+  delay
 }: {
   icon: JSX.Element;
   bg: string;
@@ -153,15 +155,17 @@ function FeatureCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
-      className="glass p-8 rounded-3xl border border-slate-100/50 hover:shadow-xl hover:border-primary/20 transition-all"
+      className="glass p-8 rounded-3xl border border-slate-100/50 hover:shadow-xl hover:border-primary/20 transition-all duration-300"
     >
       <div
-        className={`w-14 h-14 ${bg} rounded-2xl flex items-center justify-center mb-6 shadow-lg`}
+        className={`w-14 h-14 ${bg} rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-gray-200/50`}
       >
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
-      <p className="text-slate-600 leading-relaxed">{description}</p>
+      <h3 className="text-xl font-bold text-slate-800 mb-3">
+        {title}
+      </h3>
+      <p className="text-slate-600 leading-relaxed text-sm lg:text-base">{description}</p>
     </motion.div>
   );
 }
