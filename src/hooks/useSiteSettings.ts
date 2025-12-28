@@ -15,6 +15,7 @@ export type SiteSettings = {
   phone?: string;
   address?: string;
   instagram?: string;
+  facebook?: string; // Added missing field
   telegram?: string;
   youtube?: string;
 };
@@ -28,9 +29,22 @@ export function useSiteSettings() {
 
     const unsubscribe = onSnapshot(ref, (snapshot) => {
       if (snapshot.exists()) {
-        setData(snapshot.data() as SiteSettings);
+        const siteData = snapshot.data() as SiteSettings;
+        setData({
+          ...siteData,
+          brand: {
+            ...siteData.brand,
+            logoUrl: "/logo.png"
+          }
+        });
       } else {
-        setData(null);
+        // Fallback default data if DB is empty
+        setData({
+          brand: {
+            name: "Quantum Leap",
+            logoUrl: "/logo.png"
+          }
+        });
       }
       setLoading(false);
     });

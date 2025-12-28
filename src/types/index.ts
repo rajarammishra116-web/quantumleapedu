@@ -1,6 +1,15 @@
-export type Board = 'CBSE' | 'Odisha';
-export type Class = '9' | '10' | '11' | '12';
-export type Subject = 'Physics' | 'Mathematics' | 'Chemistry' | 'Biology' | 'History' | 'Geography' | 'Polity' | 'Economics' | 'Philosophy';
+export type Board = "CBSE" | "Odisha";
+export type Class = "9" | "10" | "11" | "12";
+export type Subject =
+  | "Physics"
+  | "Mathematics"
+  | "Chemistry"
+  | "Biology"
+  | "History"
+  | "Geography"
+  | "Polity"
+  | "Economics"
+  | "Philosophy";
 
 export interface StudyMaterial {
   id: string;
@@ -19,7 +28,8 @@ export interface ContentData {
   };
   about: {
     title: string;
-    text: string;
+    shortText: string;
+    longText: string;
   };
   studyMaterials: StudyMaterial[];
   footer: {
