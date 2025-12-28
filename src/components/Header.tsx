@@ -21,7 +21,8 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     { name: "Home", id: "home" },
     { name: "Study Materials", id: "materials" },
     { name: "Simulations", id: "simulations" },
-    { name: "Courses", id: "courses" }, // ✅ NEW
+    { name: "Courses", id: "courses" },
+    { name: "About Us", id: "about" },
   ];
 
   const handleNavigate = (page: Page) => {
@@ -32,12 +33,13 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        {/* 🔹 FIXED FLEX LAYOUT */}
+        <div className="flex items-center justify-between h-16">
 
           {/* Brand */}
           <button
             onClick={() => handleNavigate("home")}
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity flex-shrink-0"
           >
             {brand?.logoUrl && (
               <img
@@ -73,14 +75,15 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button — GUARANTEED VISIBLE */}
           <button
-            className="md:hidden text-[#1A233A]"
+            className="md:hidden text-[#1A233A] flex-shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
+
         </div>
       </div>
 

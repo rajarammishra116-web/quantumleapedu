@@ -14,8 +14,11 @@ type Course = {
   batchStrength?: string;
   structure?: string;
   mode?: string;
+  fees?: string;
+  timetable?: string;
   offer?: string;
   brochureUrl?: string;
+  priority?: number;
   isActive: boolean;
 };
 
@@ -39,16 +42,20 @@ export default function Courses() {
 
   const filteredCourses =
     board && classLevel
-      ? courses.filter(
-          (c) => c.board === board && c.class === classLevel
-        )
+      ? courses
+          .filter(
+            (c) => c.board === board && c.class === classLevel
+          )
+          .sort(
+            (a, b) =>
+              (a.priority ?? 999) - (b.priority ?? 999)
+          )
       : [];
 
   return (
     <div className="min-h-screen pt-16 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto space-y-8">
 
-        {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold text-[#1A233A]">
             Courses
@@ -58,7 +65,6 @@ export default function Courses() {
           </p>
         </div>
 
-        {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
           <select
             value={board}
@@ -67,9 +73,7 @@ export default function Courses() {
           >
             <option value="">Select Board</option>
             {BOARDS.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
+              <option key={b} value={b}>{b}</option>
             ))}
           </select>
 
@@ -80,35 +84,30 @@ export default function Courses() {
           >
             <option value="">Select Class</option>
             {CLASSES.map((c) => (
-              <option key={c} value={c}>
-                Class {c}
-              </option>
+              <option key={c} value={c}>Class {c}</option>
             ))}
           </select>
         </div>
 
-        {/* Guidance */}
         {(!board || !classLevel) && (
           <p className="text-center text-gray-500">
             Please select Board and Class to view available courses.
           </p>
         )}
 
-        {/* No results */}
         {board && classLevel && filteredCourses.length === 0 && (
           <p className="text-center text-gray-500">
             No courses available for the selected options.
           </p>
         )}
 
-        {/* Course Cards */}
         <div className="grid gap-6 sm:grid-cols-2">
           {filteredCourses.map((course) => (
             <div
               key={course.id}
               className="border rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="text-lg font-semibold text-[#1A233A]">
+              <h3 className="text-xl font-semibold text-[#1A233A]">
                 {course.name}
               </h3>
 
@@ -117,50 +116,23 @@ export default function Courses() {
               </p>
 
               <div className="mt-4 space-y-1 text-sm text-gray-700">
-
-                {course.subject && (
-                  <p>
-                    <strong>Subject:</strong> {course.subject}
-                  </p>
-                )}
-
-                {course.batchStrength && (
-                  <p>
-                    <strong>Batch Strength:</strong>{" "}
-                    {course.batchStrength}
-                  </p>
-                )}
-
-                {course.structure && (
-                  <p>
-                    <strong>Structure:</strong>{" "}
-                    {course.structure}
-                  </p>
-                )}
-
-                {course.mode && (
-                  <p>
-                    <strong>Mode:</strong> {course.mode}
-                  </p>
-                )}
-
-                {course.offer && (
-                  <p className="text-green-600 font-medium">
-                    {course.offer}
-                  </p>
-                )}
-
+                {course.subject && <p><strong>Subject:</strong> {course.subject}</p>}
+                {course.batchStrength && <p><strong>Batch Strength:</strong> {course.batchStrength}</p>}
+                {course.structure && <p><strong>Structure:</strong> {course.structure}</p>}
+                {course.mode && <p><strong>Mode:</strong> {course.mode}</p>}
+                {course.fees && <p><strong>Fees:</strong> {course.fees}</p>}
+                {course.timetable && <p><strong>Timetable:</strong> {course.timetable}</p>}
+                {course.offer && <p className="text-green-600 font-medium">{course.offer}</p>}
                 {course.brochureUrl && (
                   <a
                     href={course.brochureUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block mt-2 text-sm font-medium text-blue-600 underline"
+                    className="inline-block mt-2 text-blue-600 underline text-sm"
                   >
                     View Course Brochure
                   </a>
                 )}
-
               </div>
             </div>
           ))}

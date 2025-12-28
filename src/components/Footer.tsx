@@ -1,6 +1,7 @@
 import { Instagram, Send, Youtube, Mail } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Page } from "../App";
+import { Facebook } from "lucide-react";
 
 interface FooterProps {
   onNavigate: (page: Page) => void;
@@ -71,23 +72,52 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div>
             <h4 className="font-semibold mb-4">Connect With Us</h4>
 
-            <div className="flex gap-4 mb-4">
-              {data?.instagram && (
-                <a href={data.instagram} target="_blank" rel="noopener noreferrer">
-                  <Instagram size={20} />
-                </a>
-              )}
-              {data?.telegram && (
-                <a href={data.telegram} target="_blank" rel="noopener noreferrer">
-                  <Send size={20} />
-                </a>
-              )}
-              {data?.youtube && (
-                <a href={data.youtube} target="_blank" rel="noopener noreferrer">
-                  <Youtube size={20} />
-                </a>
-              )}
-            </div>
+           <div className="flex gap-4 mb-4">
+  {data?.instagram && (
+    <a
+      href={data.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:opacity-80 transition-opacity"
+    >
+      <Instagram size={20} />
+    </a>
+  )}
+
+  {data?.facebook && (
+    <a
+      href={data.facebook}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:opacity-80 transition-opacity"
+    >
+      <Facebook size={20} />
+    </a>
+  )}
+
+  {data?.telegram && (
+    <a
+      href={data.telegram}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:opacity-80 transition-opacity"
+    >
+      <Send size={20} />
+    </a>
+  )}
+
+  {data?.youtube && (
+    <a
+      href={data.youtube}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:opacity-80 transition-opacity"
+    >
+      <Youtube size={20} />
+    </a>
+  )}
+</div>
+
 
             <div className="space-y-2 text-sm text-gray-300">
               {data?.email && (

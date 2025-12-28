@@ -4,16 +4,18 @@ import Footer from "./components/Footer";
 import HomePage from "./components/HomePage";
 import StudyMaterials from "./pages/StudyMaterials";
 import Simulations from "./pages/Simulations";
+import Courses from "./pages/Courses";
+import AboutUs from "./pages/AboutUs";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Disclaimer from "./pages/Disclaimer";
-import Courses from "./pages/Courses"; // ✅ NEW
 
 export type Page =
   | "home"
   | "materials"
   | "simulations"
-  | "courses"      // ✅ NEW
+  | "courses"
+  | "about"
   | "privacy"
   | "disclaimer";
 
@@ -27,9 +29,28 @@ function App() {
       page === "home" ? "/" : `/${page}`
     );
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
+    // 🔹 On first load → sync URL to state
+    const path = window.location.pathname.replace("/", "") as Page;
+
+    const validPages: Page[] = [
+      "home",
+      "materials",
+      "simulations",
+      "courses",
+      "about",
+      "privacy",
+      "disclaimer",
+    ];
+
+    if (validPages.includes(path)) {
+      setCurrentPage(path);
+    }
+
+    // 🔹 Back / forward navigation
     const handlePopState = (event: PopStateEvent) => {
       const state = event.state as { page?: Page } | null;
       setCurrentPage(state?.page ?? "home");
@@ -47,8 +68,10 @@ function App() {
         return <StudyMaterials />;
       case "simulations":
         return <Simulations />;
-      case "courses":            // ✅ NEW
+      case "courses":
         return <Courses />;
+      case "about":
+        return <AboutUs />;
       case "privacy":
         return <PrivacyPolicy />;
       case "disclaimer":
