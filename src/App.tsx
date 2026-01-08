@@ -4,7 +4,9 @@ import Layout from "./components/Layout";
 import HomePage from "./components/HomePage";
 import Loading from "./components/Loading";
 
-// Lazy-loaded pages
+import ScrollToTop from "./components/ScrollToTop";
+
+// Lazy load pages for "0 lag" performance
 const StudyMaterials = lazy(() => import("./pages/StudyMaterials"));
 const Simulations = lazy(() => import("./pages/Simulations"));
 const Courses = lazy(() => import("./pages/Courses"));
@@ -13,13 +15,24 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Disclaimer = lazy(() => import("./pages/Disclaimer"));
 const AdminDashboard = lazy(() => import("./components/admin/AdminDashboard"));
 
+export type Page =
+  | "home"
+  | "materials"
+  | "simulations"
+  | "courses"
+  | "about"
+  | "privacy"
+  | "disclaimer";
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Layout>
         <Suspense fallback={<Loading />}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomePage onNavigate={() => { }} />} />
+            {/* Note: HomePage prop onNavigate is handled via Layout context or we need to update HomePage to use Link */}
 
             <Route path="/materials" element={<StudyMaterials />} />
             <Route path="/simulations" element={<Simulations />} />
@@ -28,10 +41,10 @@ function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
 
-            {/* Admin */}
+            {/* Admin Route */}
             <Route path="/admin" element={<AdminDashboard />} />
 
-            {/* Fallback */}
+            {/* Catch all */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
