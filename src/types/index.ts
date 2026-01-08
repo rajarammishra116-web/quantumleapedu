@@ -1,15 +1,6 @@
-export type Board = "CBSE" | "Odisha";
-export type Class = "9" | "10" | "11" | "12";
-export type Subject =
-  | "Physics"
-  | "Mathematics"
-  | "Chemistry"
-  | "Biology"
-  | "History"
-  | "Geography"
-  | "Polity"
-  | "Economics"
-  | "Philosophy";
+export type Board = 'CBSE' | 'Odisha';
+export type Class = '9' | '10' | '11' | '12';
+export type Subject = 'Physics' | 'Mathematics' | 'Chemistry' | 'Biology' | 'History' | 'Geography' | 'Polity' | 'Economics' | 'Philosophy';
 
 export interface StudyMaterial {
   id: string;
@@ -20,12 +11,19 @@ export interface StudyMaterial {
   pdfPath: string;
 }
 
+export interface Feature {
+  title: string;
+  description: string;
+  cardColor: string;
+}
+
 export interface ContentData {
   hero: {
     headline: string;
     subheadline: string;
     tagline: string;
   };
+  features: Feature[];
   about: {
     title: string;
     shortText: string;

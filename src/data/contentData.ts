@@ -2,14 +2,31 @@ import { ContentData } from '../types';
 
 export const contentData: ContentData = {
   hero: {
-    headline: "Don't Just Memorize. Experience It.",
-    subheadline: "Mastering complex concepts through interactive simulations, scientifically structured pedagogy, and curated learning paths.",
+    headline: "Don't Just Memorize. Learn to Think.",
+    subheadline: "We help students move beyond rote learning through conceptual clarity, interactive simulations, and scientifically structured pedagogy—so knowledge actually stays.",
     tagline: "From ignorance to enlightenment."
   },
+  features: [
+    {
+      title: "Concept-First Study Materials",
+      description: "Carefully structured notes and resources designed to build understanding from first principles—aligned with CBSE and Odisha Board curricula.",
+      cardColor: "bg-classroom-orange"
+    },
+    {
+      title: "See Concepts in Action",
+      description: "Abstract ideas become intuitive when you can visualize them. Our simulations let students observe, explore, and experiment—just like real science.",
+      cardColor: "bg-classroom-yellow"
+    },
+    {
+      title: "Learning That Follows Logic",
+      description: "Every topic is arranged to follow the natural flow of reasoning, helping students connect ideas instead of memorizing isolated facts.",
+      cardColor: "bg-classroom-green"
+    }
+  ],
   about: {
     title: "Our Story",
-    shortText: "Born from a shared frustration with static textbooks and one-size-fits-all schooling, we started as a small group of educators and technologists with a simple question: \"What if learning felt less like a chore and more like a discovery?\" We realized that the traditional education system often prioritizes rote memorization over genuine understanding, leaving countless brilliant minds disengaged and uninspired.",
-    longText: "Born from a shared frustration with static textbooks and one-size-fits-all schooling, we started as a small group of educators and technologists with a simple question: \"What if learning felt less like a chore and more like a discovery?\" We realized that the traditional education system often prioritizes rote memorization over genuine understanding, leaving countless brilliant minds disengaged and uninspired. \n\n We are a new, passionate company, but our vision is bold. We are building the educational platform we wish we had growing up—one that adapts to you, moves at your speed, and turns abstract concepts into tangible experiences. We aren't just creating another study app; we are crafting a new era of learning where curiosity leads the way. We believe that every student has a \"quantum leap\" in them waiting to happen, and we are here to provide the launchpad."
+    shortText: "Quantum Leap began with a simple frustration shared by educators and learners alike: education had become about finishing syllabi rather than understanding ideas. We saw students memorizing formulas they did not believe in, solving problems they did not truly understand, and losing curiosity along the way. Our goal is not to teach faster—but to teach deeper.",
+    longText: "Born from a shared frustration with static textbooks and one-size-fits-all schooling, Quantum Leap was created to challenge how learning is traditionally experienced. We started as a small group of educators and technologists with a simple question: \"What if learning felt less like a chore and more like a discovery?\" We realized that the traditional education system often prioritizes rote memorization over genuine understanding, leaving countless brilliant minds disengaged and uninspired. \n\n We are a new, passionate company, but our vision is bold. We are building the educational platform we wish we had growing up—one that adapts to you, moves at your speed, and turns abstract concepts into tangible experiences. We aren't just creating another study app; we are crafting a new era of learning where curiosity leads the way. We believe that every student has a \"quantum leap\" in them waiting to happen, and we are here to provide the launchpad."
   },
   studyMaterials: [
     {
