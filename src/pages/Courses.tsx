@@ -475,6 +475,7 @@ function CoursePosterModal({
                 href={course.brochureUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                download
                 className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors shadow-lg shadow-slate-200"
               >
                 <Download size={20} /> Download Brochure
