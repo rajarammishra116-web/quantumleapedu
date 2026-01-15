@@ -31,17 +31,17 @@ export default function Footer({ }: FooterProps) {
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/20 blur-[120px] rounded-full mix-blend-screen will-change-transform"
+          className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-primary/20 blur-[120px] rounded-full mix-blend-screen will-change-transform hidden md:block"
         />
         <motion.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-[10%] -right-[10%] w-[50%] h-[50%] bg-secondary/20 blur-[120px] rounded-full mix-blend-screen will-change-transform"
+          className="absolute top-[10%] -right-[10%] w-[50%] h-[50%] bg-secondary/20 blur-[120px] rounded-full mix-blend-screen will-change-transform hidden md:block"
         />
         <motion.div
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-[20%] left-[30%] w-[40%] h-[40%] bg-purple-500/10 blur-[100px] rounded-full mix-blend-screen will-change-transform"
+          className="absolute -bottom-[20%] left-[30%] w-[40%] h-[40%] bg-purple-500/10 blur-[100px] rounded-full mix-blend-screen will-change-transform hidden md:block"
         />
 
         {/* Grid Pattern Overlay */}

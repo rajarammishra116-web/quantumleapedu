@@ -64,7 +64,7 @@ export default function StudyMaterials() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
+      transition: { staggerChildren: 0.05 }
     }
   };
 
@@ -81,7 +81,7 @@ export default function StudyMaterials() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-          className="absolute top-20 right-[-100px] text-classroom-yellow/10"
+          className="absolute top-20 right-[-100px] text-classroom-yellow/10 hidden md:block"
         >
           <Atom size={400} />
         </motion.div>

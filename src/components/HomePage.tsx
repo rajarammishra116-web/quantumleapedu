@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Layers, PlayCircle, Calculator, Globe, Microscope, GraduationCap, Atom, Ruler, BrainCircuit, Compass, Hourglass, Dna, Pi, Sigma, Triangle, Divide, Bot, Telescope } from "lucide-react";
+import { ArrowRight, BookOpen, Layers, PlayCircle, Calculator, Globe, Atom, Ruler, BrainCircuit, Hourglass, Dna, Pi, Sigma, Triangle, Divide, Bot, Telescope } from "lucide-react";
 import { contentData } from "../data/contentData";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -26,8 +26,8 @@ export default function HomePage({ }: HomePageProps) {
       {/* HERO SECTION */}
       <section className="relative pt-32 pb-32 px-6 sm:px-8 lg:px-12 overflow-hidden flex flex-col items-center text-center bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
         {/* Decorative Background Elements */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-classroom-purple/20 rounded-full blur-3xl -z-10 animate-blob" />
-        <div className="absolute top-40 right-10 w-40 h-40 bg-classroom-yellow/20 rounded-full blur-3xl -z-10 animate-blob animation-delay-2000" />
+        <div className="absolute top-20 left-10 w-32 h-32 bg-classroom-purple/20 rounded-full blur-3xl -z-10 animate-blob hidden md:block" />
+        <div className="absolute top-40 right-10 w-40 h-40 bg-classroom-yellow/20 rounded-full blur-3xl -z-10 animate-blob animation-delay-2000 hidden md:block" />
 
         {/* Floating Subject Icons */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden -z-5">

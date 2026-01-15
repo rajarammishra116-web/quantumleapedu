@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   Download,
-  Calendar,
   Clock,
   Users,
   BookOpen,
@@ -15,7 +14,6 @@ import {
   Dna,
   FlaskConical,
   Globe,
-  Languages,
   Sparkles,
   CheckCircle2,
   GraduationCap
@@ -114,12 +112,18 @@ export default function Courses() {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const snap = await getDocs(collection(db, "courses"));
-      setCourses(
-        snap.docs
-          .map((d) => ({ id: d.id, ...(d.data() as Course) }))
-          .filter((c) => c.isActive)
-      );
+      try {
+        const snap = await getDocs(collection(db, "courses"));
+        setCourses(
+          snap.docs
+            .map((d) => ({ id: d.id, ...(d.data() as Omit<Course, "id">) }))
+            .filter((c) => c.isActive)
+        );
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        // Note: Failing silently for UI, but logging for debugging.
+        // This is usually due to Firestore Permission Denied if not logged in.
+      }
     };
     fetchCourses();
   }, []);
@@ -143,7 +147,7 @@ export default function Courses() {
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 bg-surface-light relative">
       {/* Background Decor */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden hidden md:block">
         <div className="absolute top-20 left-10 w-64 h-64 bg-classroom-purple/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-classroom-yellow/10 rounded-full blur-3xl" />
       </div>
@@ -282,7 +286,7 @@ function CourseTicket({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ delay: index * 0.1 }}
+      transition={{ delay: index * 0.05 }}
       onClick={onClick}
       className="group relative cursor-pointer"
     >
