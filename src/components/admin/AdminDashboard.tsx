@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Settings } from "lucide-react";
+// import { Settings } from "lucide-react"; // Removed
 import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { auth } from "../../firebase";
 
 import AdminLogin from "./AdminLogin";
 import BrandAdmin from "./BrandAdmin";
 import HomepageAdmin from "./HomepageAdmin";
-import SocialAdmin from "./SocialAdmin";
+// import SocialAdmin from "./SocialAdmin"; // Removed
 import StudyMaterialAdmin from "./StudyMaterialAdmin";
 import SimulationAdmin from "./SimulationAdmin";
 import LegalAdmin from "./LegalAdmin";
@@ -15,18 +15,16 @@ import CoursesAdmin from "./CoursesAdmin";
 const tabs = [
   "Brand",
   "Homepage",
-  "Social",
+
   "Study Materials",
   "Simulations",
-  "Courses",      // ✅ NEW
+  "Courses",
   "Legal",
 ] as const;
 
 export default function AdminDashboard() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] =
-    useState<typeof tabs[number]>("Brand");
-
+  // const [isOpen, setIsOpen] = useState(false); // Removed
+  const [activeTab, setActiveTab] = useState<typeof tabs[number]>("Brand");
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
   useEffect(() => {
@@ -37,80 +35,57 @@ export default function AdminDashboard() {
   }, []);
 
   /* ============================
-     SECRET ADMIN TRIGGER BUTTON
-     ============================ */
-  if (!isOpen) {
-    return (
-      <div
-        className="
-          fixed bottom-4 right-4 z-50
-          w-10 h-10
-          opacity-0 hover:opacity-100
-          transition-opacity duration-300
-          cursor-pointer
-        "
-        onClick={() => setIsOpen(true)}
-        aria-label="Open Admin Dashboard"
-      >
-        <div className="w-full h-full rounded-full bg-gray-800 text-white flex items-center justify-center shadow-lg">
-          <Settings size={18} />
-        </div>
-      </div>
-    );
-  }
-
-  /* ============================
-     ADMIN DASHBOARD MODAL
+     ADMIN DASHBOARD
      ============================ */
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white rounded-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-white z-[10000] flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex justify-between items-center px-6 py-4 border-b bg-white shadow-sm">
+        <h2 className="text-xl font-bold text-slate-900">Admin Console</h2>
 
-        {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b">
-          <h2 className="text-xl font-bold">Admin Dashboard</h2>
+        <div className="flex items-center gap-4">
+          <a href="/" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
+            Back to Home
+          </a>
 
-          <div className="flex items-center gap-4">
-            {user && (
-              <button
-                onClick={() => signOut(auth)}
-                className="text-sm text-red-600 hover:underline"
-              >
-                Logout
-              </button>
-            )}
-
+          {user && (
             <button
-              onClick={() => setIsOpen(false)}
-              className="text-gray-500 hover:text-black"
-              aria-label="Close admin dashboard"
+              onClick={() => signOut(auth)}
+              className="text-sm font-medium text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md transition-colors"
             >
-              ✕
+              Logout
             </button>
-          </div>
+          )}
         </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+        <div className="max-w-7xl mx-auto w-full">
           {user === undefined && (
-            <p className="text-gray-500">Checking authentication…</p>
+            <div className="flex h-full items-center justify-center text-gray-500">Checking authentication...</div>
           )}
 
-          {user === null && <AdminLogin />}
+          {user === null && (
+            <div className="flex h-full items-center justify-center min-h-[60vh]">
+              <div className="w-full max-w-md">
+                <AdminLogin onSuccess={() => { }} />
+              </div>
+            </div>
+          )}
 
           {user && (
             <>
               {/* Tabs */}
-              <div className="flex border-b mb-6 overflow-x-auto">
+              <div className="flex border-b border-gray-200 mb-6 overflow-x-auto pb-1 bg-white rounded-xl px-2 shadow-sm">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
-                      activeTab === tab
-                        ? "border-b-2 border-black text-black"
-                        : "text-gray-500 hover:text-black"
-                    }`}
+                    className={`px-5 py-3 text-sm font-bold whitespace-nowrap transition-colors border-b-2 ${activeTab === tab
+                      ? "border-primary text-primary"
+                      : "border-transparent text-gray-500 hover:text-slate-700 hover:bg-gray-50"
+                      }`}
                   >
                     {tab}
                   </button>
@@ -118,13 +93,15 @@ export default function AdminDashboard() {
               </div>
 
               {/* Tab Content */}
-              {activeTab === "Brand" && <BrandAdmin />}
-              {activeTab === "Homepage" && <HomepageAdmin />}
-              {activeTab === "Social" && <SocialAdmin />}
-              {activeTab === "Study Materials" && <StudyMaterialAdmin />}
-              {activeTab === "Simulations" && <SimulationAdmin />}
-              {activeTab === "Legal" && <LegalAdmin />}
-              {activeTab === "Courses" && <CoursesAdmin />}
+              <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
+                {activeTab === "Brand" && <BrandAdmin />}
+                {activeTab === "Homepage" && <HomepageAdmin />}
+                {/* {activeTab === "Social" && <SocialAdmin />} */}
+                {activeTab === "Study Materials" && <StudyMaterialAdmin />}
+                {activeTab === "Simulations" && <SimulationAdmin />}
+                {activeTab === "Legal" && <LegalAdmin />}
+                {activeTab === "Courses" && <CoursesAdmin />}
+              </div>
             </>
           )}
         </div>

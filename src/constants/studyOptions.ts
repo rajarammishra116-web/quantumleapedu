@@ -12,3 +12,7 @@ export const SUBJECTS = [
   "Political Science",
   "Economics",
 ] as const;
+
+export const SIMULATION_SUBJECTS = SUBJECTS.filter((s) =>
+  !["History", "Political Science", "Economics"].includes(s)
+);

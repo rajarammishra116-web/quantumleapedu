@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import {
   collection,
@@ -13,11 +14,13 @@ import {
   CLASSES,
   SUBJECTS,
 } from "../../constants/studyOptions";
+import { Book, ChevronDown, ChevronRight, FileText, Trash2 } from "lucide-react";
 
 export default function StudyMaterialAdmin() {
   const [materials, setMaterials] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     board: "",
@@ -72,74 +75,153 @@ export default function StudyMaterialAdmin() {
     fetchMaterials();
   };
 
+  const toggleSubject = (subject: string) => {
+    setExpandedSubject(expandedSubject === subject ? null : subject);
+  };
+
+  const groupedMaterials = SUBJECTS.reduce((acc, subject) => {
+    acc[subject] = materials.filter(m => m.subject === subject);
+    return acc;
+  }, {} as Record<string, any[]>);
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Study Materials Admin</h2>
+    <div className="space-y-8 max-w-4xl mx-auto">
 
-      <select
-        className="input"
-        value={form.board}
-        onChange={(e) => setForm({ ...form, board: e.target.value })}
-      >
-        <option value="">Board</option>
-        {BOARDS.map((b) => (
-          <option key={b}>{b}</option>
-        ))}
-      </select>
+      {/* ADD SECTION */}
+      <div className="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <span className="bg-slate-900 text-white p-1 rounded">
+            <Book size={18} />
+          </span>
+          Add Study Material
+        </h2>
 
-      <select
-        className="input"
-        value={form.class}
-        onChange={(e) => setForm({ ...form, class: e.target.value })}
-      >
-        <option value="">Class</option>
-        {CLASSES.map((c) => (
-          <option key={c}>{c}</option>
-        ))}
-      </select>
+        <div className="grid gap-4 md:grid-cols-2">
+          <select
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+            value={form.board}
+            onChange={(e) => setForm({ ...form, board: e.target.value })}
+          >
+            <option value="">Select Board</option>
+            {BOARDS.map((b) => (
+              <option key={b}>{b}</option>
+            ))}
+          </select>
 
-      <select
-        className="input"
-        value={form.subject}
-        onChange={(e) => setForm({ ...form, subject: e.target.value })}
-      >
-        <option value="">Subject</option>
-        {SUBJECTS.map((s) => (
-          <option key={s}>{s}</option>
-        ))}
-      </select>
+          <select
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+            value={form.class}
+            onChange={(e) => setForm({ ...form, class: e.target.value })}
+          >
+            <option value="">Select Class</option>
+            {CLASSES.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
 
-      <input
-        className="input"
-        placeholder="Google Drive / PDF link"
-        value={form.pdfUrl}
-        onChange={(e) => setForm({ ...form, pdfUrl: e.target.value })}
-      />
+          <select
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+            value={form.subject}
+            onChange={(e) => setForm({ ...form, subject: e.target.value })}
+          >
+            <option value="">Select Subject</option>
+            {SUBJECTS.map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
 
-      <button
-        onClick={handleSubmit}
-        className="btn-primary"
-        disabled={saving}
-      >
-        {saving ? "Saving..." : "Add Link"}
-      </button>
+          <input
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
+            placeholder="Google Drive / PDF link"
+            value={form.pdfUrl}
+            onChange={(e) => setForm({ ...form, pdfUrl: e.target.value })}
+          />
 
-      {message && <p>{message}</p>}
+          <button
+            onClick={handleSubmit}
+            className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 active:scale-95 transition-all md:col-span-2 shadow-lg shadow-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={saving}
+          >
+            {saving ? "Saving..." : "Add Link"}
+          </button>
 
-      <div className="space-y-2">
-        {materials.map((m) => (
-          <div key={m.id} className="border p-2 flex justify-between">
-            <span>
-              {m.board} | {m.class} | {m.subject}
-            </span>
-            <button
-              className="text-red-500"
-              onClick={() => deleteMaterial(m.id)}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+          {message && (
+            <p className={`text-sm md:col-span-2 text-center font-bold ${message.includes('❌') ? 'text-red-500' : 'text-green-600'}`}>
+              {message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* LIST SECTION */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-slate-900">Manage Materials</h3>
+
+        <div className="grid gap-3">
+          {SUBJECTS.map((subject) => {
+            const subjectMaterials = groupedMaterials[subject] || [];
+            const count = subjectMaterials.length;
+            const isExpanded = expandedSubject === subject;
+
+            return (
+              <div key={subject} className="bg-white border border-slate-200 rounded-xl overflow-hidden transition-all duration-300">
+                <button
+                  onClick={() => toggleSubject(subject)}
+                  className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${count > 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-400'}`}>
+                      {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                    </div>
+                    <span className="font-bold text-slate-700 text-lg">{subject}</span>
+                  </div>
+                  <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">
+                    {count} files
+                  </span>
+                </button>
+
+                {isExpanded && (
+                  <div className="border-t border-slate-100 bg-slate-50/50 p-2">
+                    {count === 0 ? (
+                      <div className="text-center py-6 text-slate-400 text-sm italic">
+                        No materials uploaded for {subject}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {subjectMaterials.map(m => (
+                          <div key={m.id} className="bg-white p-3 rounded-lg border border-slate-100 shadow-sm flex items-center justify-between group">
+                            <div className="flex-1 min-w-0 flex items-center gap-3">
+                              <div className="p-2 bg-red-50 text-red-500 rounded-lg">
+                                <FileText size={20} />
+                              </div>
+                              <div>
+                                <div className="font-bold text-slate-800 text-sm truncate max-w-[200px] md:max-w-md">
+                                  {m.pdfUrl}
+                                </div>
+                                <div className="text-xs text-slate-500 flex gap-2">
+                                  <span className="bg-slate-100 px-1.5 py-0.5 rounded">{m.board}</span>
+                                  <span className="bg-slate-100 px-1.5 py-0.5 rounded">Class {m.class}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <button
+                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              onClick={() => deleteMaterial(m.id)}
+                              title="Delete Material"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

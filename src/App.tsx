@@ -13,6 +13,7 @@ const Courses = lazy(() => import("./pages/Courses"));
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Disclaimer = lazy(() => import("./pages/Disclaimer"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const AdminDashboard = lazy(() => import("./components/admin/AdminDashboard"));
 
 export type Page =
@@ -22,7 +23,8 @@ export type Page =
   | "courses"
   | "about"
   | "privacy"
-  | "disclaimer";
+  | "disclaimer"
+  | "terms";
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
             {/* Admin Route */}
             <Route path="/admin" element={<AdminDashboard />} />

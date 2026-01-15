@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Page } from "../App";
 import { motion, AnimatePresence } from "framer-motion";
 
-import AdminDashboard from "./admin/AdminDashboard";
+// import AdminDashboard from "./admin/AdminDashboard"; // Removed
 
 interface LayoutProps {
     children: ReactNode;
@@ -35,6 +35,16 @@ export default function Layout({ children }: LayoutProps) {
         navigate(page === "home" ? "/" : `/${page}`);
     };
 
+    if (location.pathname.startsWith("/admin")) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <Suspense fallback={null}>
+                    {children}
+                </Suspense>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-slate-50 relative overflow-x-hidden">
             {/* Background Gradients */}
@@ -62,14 +72,7 @@ export default function Layout({ children }: LayoutProps) {
 
             <Footer onNavigate={handleNavigate} />
 
-            {/* Admin Dashboard: Rendered as a modal, secret button visible only on Home */}
-            {location.pathname === "/" && (
-                <div className="relative z-[9999]">
-                    <Suspense fallback={null}>
-                        <AdminDashboard />
-                    </Suspense>
-                </div>
-            )}
+
         </div>
     );
 }

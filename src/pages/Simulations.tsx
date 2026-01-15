@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { BOARDS, CLASSES, SUBJECTS } from "../constants/studyOptions";
+import { CLASSES, SIMULATION_SUBJECTS } from "../constants/studyOptions"; // SUBJECTS removed
 import { motion } from "framer-motion";
 import {
   Gamepad2,
@@ -29,7 +29,6 @@ export default function Simulations() {
   const [items, setItems] = useState<Simulation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    board: "",
     class: "",
     subject: "",
   });
@@ -52,10 +51,9 @@ export default function Simulations() {
   }, []);
 
   const filteredItems =
-    filters.board && filters.class && filters.subject
+    filters.class && filters.subject
       ? items.filter(
         (s) =>
-          s.board === filters.board &&
           s.class === filters.class &&
           s.subject === filters.subject
       )
@@ -140,11 +138,10 @@ export default function Simulations() {
             <h2 className="text-xl font-bold text-slate-900">Filter Simulation Labs</h2>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
             {[
-              { label: "Board", value: filters.board, options: BOARDS, onChange: (v: string) => setFilters({ ...filters, board: v }), icon: Globe },
               { label: "Class", value: filters.class, options: CLASSES, onChange: (v: string) => setFilters({ ...filters, class: v }), icon: Rocket },
-              { label: "Subject", value: filters.subject, options: SUBJECTS, onChange: (v: string) => setFilters({ ...filters, subject: v }), icon: Cpu },
+              { label: "Subject", value: filters.subject, options: SIMULATION_SUBJECTS, onChange: (v: string) => setFilters({ ...filters, subject: v }), icon: Cpu },
             ].map((filter, idx) => (
               <div key={idx} className="relative group">
                 <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
@@ -178,7 +175,7 @@ export default function Simulations() {
             </div>
           ) : (
             <>
-              {(!filters.board || !filters.class || !filters.subject) ? (
+              {(!filters.class || !filters.subject) ? (
                 <div className="text-center py-16 px-4 bg-purple-50 rounded-3xl border-2 border-dashed border-classroom-purple">
                   <div className="inline-block p-4 bg-classroom-purple text-white rounded-full mb-4 border-2 border-slate-900">
                     <Search className="w-8 h-8" />
