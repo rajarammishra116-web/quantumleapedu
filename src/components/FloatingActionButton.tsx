@@ -3,20 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+
 export function FloatingActionButton() {
     const [isOpen, setIsOpen] = useState(false);
+    const { data } = useSiteSettings();
 
     const actions = [
         {
             icon: Mail,
             label: 'Email Us',
-            href: 'mailto:contact@quantumleap.edu',
+            href: `mailto:${data?.email || 'contact@quantumleap.edu'}`,
             color: 'bg-blue-500 hover:bg-blue-600',
         },
         {
             icon: Phone,
             label: 'Call Us',
-            href: 'tel:+911234567890',
+            href: `tel:${data?.phone || '+911234567890'}`,
             color: 'bg-green-500 hover:bg-green-600',
         },
     ];
