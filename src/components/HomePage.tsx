@@ -6,11 +6,7 @@ import { Page } from "../App";
 import { OrbitSimulation } from "./PhysicsSimulations";
 import { useContentData } from "@/hooks/useContentData";
 
-interface HomePageProps {
-  onNavigate: (page: Page) => void;
-}
-
-export default function HomePage({ }: HomePageProps) {
+export default function HomePage() {
   const { homepageContent } = useContentData();
 
   // Use Firestore content if available, otherwise fall back to contentData

@@ -8,6 +8,10 @@ import {
   Download,
   Clock,
   Users,
+  Gamepad2,
+  ExternalLink,
+  Search,
+  Filter,
   BookOpen,
   Atom,
   Calculator,
@@ -185,54 +189,71 @@ export default function Courses() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white p-6 rounded-2xl shadow-lg border-2 border-slate-100 max-w-2xl mx-auto flex flex-col sm:flex-row gap-4"
+          className="bg-white p-6 md:p-8 rounded-3xl border-4 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] max-w-4xl mx-auto mb-12"
         >
-          <div className="flex-1 relative">
-            <label className="absolute -top-2.5 left-3 bg-white px-1 text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Board
-            </label>
-            <select
-              value={board}
-              onChange={(e) => setBoard(e.target.value)}
-              className="w-full p-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-medium focus:border-classroom-blue focus:ring-0 outline-none transition-all cursor-pointer hover:bg-white"
-            >
-              <option value="">Select Board</option>
-              {BOARDS.map((b) => (
-                <option key={b} value={b}>
-                  {b}
-                </option>
-              ))}
-            </select>
+          <div className="flex items-center gap-3 mb-6">
+            <Filter className="w-6 h-6 text-slate-900" />
+            <h2 className="text-xl font-bold text-slate-900">Filter Courses</h2>
           </div>
 
-          <div className="flex-1 relative">
-            <label className="absolute -top-2.5 left-3 bg-white px-1 text-xs font-bold text-slate-500 uppercase tracking-wider">
-              Class
-            </label>
-            <select
-              value={classLevel}
-              onChange={(e) => setClassLevel(e.target.value)}
-              className="w-full p-3 rounded-xl border-2 border-slate-200 bg-slate-50 font-medium focus:border-classroom-blue focus:ring-0 outline-none transition-all cursor-pointer hover:bg-white"
-            >
-              <option value="">Select Class</option>
-              {CLASSES.map((c) => (
-                <option key={c} value={c}>
-                  Class {c}
-                </option>
-              ))}
-            </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="relative group">
+              <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                Board
+              </label>
+              <div className="relative">
+                <select
+                  value={board}
+                  onChange={(e) => setBoard(e.target.value)}
+                  className="w-full appearance-none bg-indigo-50 border-2 border-slate-900 text-slate-900 py-4 px-5 pr-10 rounded-xl font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(99,102,241,1)] transition-all cursor-pointer"
+                >
+                  <option value="">Select Board</option>
+                  {BOARDS.map((b) => (
+                    <option key={b} value={b} className="text-slate-900">
+                      {b}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-900">
+                  <Globe size={20} />
+                </div>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wider">
+                Class
+              </label>
+              <div className="relative">
+                <select
+                  value={classLevel}
+                  onChange={(e) => setClassLevel(e.target.value)}
+                  className="w-full appearance-none bg-purple-50 border-2 border-slate-900 text-slate-900 py-4 px-5 pr-10 rounded-xl font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(168,85,247,1)] transition-all cursor-pointer"
+                >
+                  <option value="">Select Class</option>
+                  {CLASSES.map((c) => (
+                    <option key={c} value={c} className="text-slate-900">
+                      Class {c}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-900">
+                  <Users size={20} />
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
 
         {/* Info Message */}
         {(!board || !classLevel) && filteredCourses.length > 0 && (
-          <div className="text-center py-6 text-slate-600 bg-primary/5 rounded-xl border border-primary/20">
-            <p className="font-medium">📚 Showing all available courses. Use filters above to narrow your search.</p>
+          <div className="text-center py-6 text-slate-600 bg-white/50 rounded-xl border border-slate-200/50 backdrop-blur-sm">
+            <p className="font-medium flex items-center justify-center gap-2"><Search size={18} /> Showing all available courses. Use filters above to narrow your search.</p>
           </div>
         )}
 
         {/* Course Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
             {filteredCourses.map((course, index) => (
               <CourseTicket
@@ -246,8 +267,9 @@ export default function Courses() {
         </div>
 
         {board && classLevel && filteredCourses.length === 0 && (
-          <div className="text-center py-12 text-slate-500">
-            No courses found for this selection yet.
+          <div className="text-center py-16 px-4 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-300">
+            <p className="text-xl font-bold text-slate-900 mb-2">No courses found yet 📚</p>
+            <p className="text-slate-600">Try a different combination or check back later!</p>
           </div>
         )}
       </div>
@@ -282,54 +304,51 @@ function CourseTicket({
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ delay: index * 0.05 }}
+      whileHover={{ y: -8 }}
       onClick={onClick}
-      className="group relative cursor-pointer"
+      className="bg-white rounded-3xl border-4 border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] hover:shadow-[10px_10px_0px_0px_rgba(244,63,94,1)] transition-all overflow-hidden flex flex-col h-full cursor-pointer group"
     >
-      <div className="absolute inset-0 bg-slate-900 rounded-2xl transform translate-x-2 translate-y-2 group-hover:translate-x-3 group-hover:translate-y-3 transition-transform" />
-      <div className={`relative bg-white rounded-2xl border-2 border-slate-900 p-1 flex flex-col h-full overflow-hidden transition-transform group-hover:-translate-y-1`}>
-        {/* Banner */}
-        <div className={`h-24 rounded-xl bg-gradient-to-r ${theme.gradient} flex items-center justify-between px-6 relative overflow-hidden`}>
-          <Icon className="text-white/20 absolute -right-4 -bottom-4 w-24 h-24 rotate-12" />
-          <div className="text-white relative z-10">
-            <span className="text-xs font-bold uppercase tracking-wider opacity-90 border border-white/30 px-2 py-0.5 rounded-md">
-              {course.board} • Class {course.class}
-            </span>
-            <h3 className="text-xl font-bold mt-1 line-clamp-1">{course.subject || "Course"}</h3>
-          </div>
+      {/* Card Header Illustration */}
+      <div className={`h-32 bg-slate-100 flex items-center justify-center border-b-4 border-slate-900 relative overflow-hidden group-hover:bg-slate-50 transition-colors`}>
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <Icon size={48} className={`text-slate-400 group-hover:${theme.text} transition-colors duration-300`} />
+        <div className="absolute top-3 right-3 px-2 py-1 bg-white border-2 border-slate-900 rounded text-xs font-bold uppercase z-10 text-slate-900">
+          {course.subject || "Course"}
         </div>
+        <div className="absolute bottom-3 left-3 px-2 py-1 bg-slate-900 text-white rounded text-xs font-bold uppercase z-10">
+          {course.board} • {course.class}
+        </div>
+      </div>
 
-        {/* Content */}
-        <div className="p-5 flex-1 flex flex-col">
-          <h4 className="text-lg font-bold text-slate-900 mb-2 leading-tight">
-            {course.name}
-          </h4>
+      <div className="p-6 flex-1 flex flex-col">
+        <h3 className="text-xl font-extrabold text-slate-900 mb-3 line-clamp-2 leading-tight">
+          {course.name}
+        </h3>
 
-          <div className="space-y-3 mt-auto">
-            {course.mode && (
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <Users size={16} />
-                <span>{course.mode}</span>
-              </div>
-            )}
-            {course.fees && (
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-900 bg-slate-100 p-2 rounded-lg">
-                <span className="text-green-600">₹</span>
-                <span>{course.fees}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-dashed border-slate-200 flex justify-between items-center text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">
-            <span>View Details</span>
-            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-              →
+        <div className="space-y-3 mt-auto mb-6">
+          {course.mode && (
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
+              <Users size={16} className="text-classroom-blue" />
+              <span>{course.mode}</span>
             </div>
-          </div>
+          )}
+          {course.fees && (
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-900 bg-green-50 p-2 rounded-lg border border-green-100">
+              <span className="text-green-600 px-1">₹</span>
+              <span>{course.fees}</span>
+            </div>
+          )}
         </div>
+
+        <button
+          className="mt-auto w-full py-3 bg-classroom-yellow text-slate-900 font-bold rounded-xl border-2 border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-[1px] hover:translate-y-[1px] transition-all flex items-center justify-center gap-2"
+        >
+          View Details <Sparkles size={16} />
+        </button>
       </div>
     </motion.div>
   );

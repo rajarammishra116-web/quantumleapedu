@@ -1,137 +1,132 @@
-
+import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 import { motion } from "framer-motion";
 
+const DEFAULT_TERMS = `
+# Terms and Conditions
+
+## 1. Introduction
+Throughout this document, the terms "We" / "Us" / "Our" / "Company" / "Website" individually and collectively refer to **Quantum Leap** and the terms "You" / "Your" / "Yourself" refer to the "User" / "Customer" / "Subscriber" of our website.
+
+By accessing, browsing, or using this website, you agree to be bound by these Terms and Conditions. Please read them carefully.
+
+## 2. Services
+We provide ("Services") educational resources including:
+- Interactive Simulations (External/Third-Party)
+- Study Materials
+- Courses for competitive exams and academic learning
+
+Content of the website (all text, documents, videos, code) is the property of Quantum Leap, excluding external simulations which belong to their respective owners.
+
+## 3. User Account
+- You may be asked to submit personal information (Name, Email, etc.) for registration.
+- You are responsible for maintaining the confidentiality of your account information.
+- We reserve the right to suspend/terminate accounts if provided information is false or if the account is misused.
+- Accounts are non-transferable.
+
+## 4. Usage Rights
+- **Personal Use Only**: Authorized users can access content for personal educational use.
+- **No Resale**: You shall not resell, distribute, or use our content for commercial purposes.
+- **No Downloading**: Unless explicitly allowed, users shall not download proprietary code or protected assets.
+
+## 5. Intellectual Property Rights ("IPR")
+All original content, design, text, graphics, and code belong to **Quantum Leap** and are protected by copyright and IPR laws. 
+**Note on Simulations**: Simulations provided on this platform are aggregated from third-party sources for educational purposes. We do not claim ownership of these external simulations. All rights belong to their original creators.
+
+## 6. Liability & Disclaimer
+- We make no representations about the absolute accuracy or completeness of the data. 
+- We provide content "as is" and assume no liability for any damages resulting from the use of our services.
+- We reserve the right to modify or discontinue services at any time.
+
+## 7. Changes to Terms
+We reserve the right to change these Terms of Use at any time without prior notice. Continued use of the website implies acceptance of the updated terms.
+
+## 8. Contact Us
+For issues or grievances, please contact us at our support email provided on the website.
+`;
+
 export default function TermsOfService() {
-    const fadeInUp = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5 }
+    const [data, setData] = useState<{ title: string; content: string } | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const snap = await getDoc(doc(db, "legalPages", "termsOfService"));
+                if (snap.exists()) {
+                    setData(snap.data() as any);
+                } else {
+                    // Fallback to default if not saved in DB yet
+                    setData({ title: "Terms and Conditions", content: DEFAULT_TERMS });
+                }
+            } catch (error) {
+                console.error("Error fetching terms:", error);
+                // Fallback on error too
+                setData({ title: "Terms and Conditions", content: DEFAULT_TERMS });
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen pt-32 pb-20 flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
+            </div>
+        );
+    }
+
+    // Simple Markdown-ish renderer for basic structure (headers, lists)
+    // Since we don't have a markdown library installed
+    const renderContent = (content: string) => {
+        if (!content) return null;
+        return content.split('\n').map((line, i) => {
+            // Headers
+            if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-bold mt-6 mb-3 text-slate-800">{line.replace('## ', '')}</h2>;
+            if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-bold mt-8 mb-4 text-slate-900">{line.replace('# ', '')}</h1>;
+
+            // Bullets
+            if (line.trim().startsWith('- ')) return <li key={i} className="ml-4 list-disc text-slate-600 mb-1">{line.replace('- ', '')}</li>;
+
+            // Bold (simple regex for **text**)
+            if (line.includes('**')) {
+                const parts = line.split(/(\*\*.*?\*\*)/g);
+                return (
+                    <p key={i} className="mb-3 text-slate-600 leading-relaxed">
+                        {parts.map((part, j) => {
+                            if (part.startsWith('**') && part.endsWith('**')) {
+                                return <strong key={j} className="font-semibold text-slate-800">{part.slice(2, -2)}</strong>;
+                            }
+                            return part;
+                        })}
+                    </p>
+                );
+            }
+
+            return <p key={i} className="mb-3 text-slate-600 leading-relaxed min-h-[1em]">{line}</p>;
+        });
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-                <div className="bg-slate-900 px-8 py-10 text-white relative overflow-hidden">
-                    {/* Decorative background elements matching site theme */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/20 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+        <div className="min-h-screen pt-32 pb-20 px-4 sm:px-6 bg-surface-light">
+            <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                >
+                    <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 border-b border-slate-100 pb-6">
+                        {data?.title || "Terms and Conditions"}
+                    </h1>
 
-                    <motion.div {...fadeInUp} className="relative z-10">
-                        <h1 className="text-3xl md:text-4xl font-bold mb-4">Terms of Service</h1>
-                        <p className="text-slate-300 text-lg">Quantum Leap: From Ignorance to Enlightenment</p>
-                    </motion.div>
-                </div>
-
-                <div className="p-8 md:p-12 space-y-10 text-slate-700 leading-relaxed">
-                    <motion.section
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        <p className="mb-6">
-                            By accessing or using this website/app/platform, you agree to be bound by the following terms and conditions of use, which together with our Privacy Policy govern <strong>Quantum Leap: From Ignorance to Enlightenment</strong>’s relationship with you.
-                        </p>
-                        <p>
-                            The terms <strong>“Quantum Leap,” “we,” “us,”</strong> or <strong>“our”</strong> refer to the owner of this website/app. The term <strong>“you”</strong> refers to the user or viewer.
-                        </p>
-                    </motion.section>
-
-                    <div className="h-px bg-slate-100" />
-
-                    <motion.section
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="space-y-6"
-                    >
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-sm">1</span>
-                                Intellectual Property
-                            </h2>
-                            <div className="pl-11 space-y-4">
-                                <p>
-                                    This website/app contains material owned by or licensed to Quantum Leap, including but not limited to:
-                                </p>
-                                <ul className="list-disc space-y-2 pl-5">
-                                    <li>Course content</li>
-                                    <li>Text</li>
-                                    <li>Graphics</li>
-                                    <li>Logos</li>
-                                    <li>Design, layout, and appearance</li>
-                                    <li>Videos, notes, and assessments</li>
-                                </ul>
-                                <p>
-                                    Reproduction, distribution, modification, or reuse of any material is prohibited without prior written permission, except as permitted under applicable copyright laws.
-                                </p>
-                                <p>
-                                    All trademarks not owned by or licensed to Quantum Leap are duly acknowledged.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-sm">2</span>
-                                Unauthorized Use
-                            </h2>
-                            <div className="pl-11 space-y-4">
-                                <p>
-                                    Unauthorized use of this platform may give rise to claims for damages and/or be considered a criminal offense under applicable laws.
-                                </p>
-                                <p>
-                                    You may not create links to this website or app from another website or document without prior written consent from Quantum Leap.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-sm">3</span>
-                                Payments & Refund Policy
-                            </h2>
-                            <div className="pl-11 space-y-4">
-                                <ul className="list-disc space-y-2 pl-5">
-                                    <li>All payments made for courses, subscriptions, or services are <strong>final and non-refundable</strong>.</li>
-                                    <li>Credit/Debit card or online payment orders will be processed only after authorization from the respective payment gateway.</li>
-                                    <li>Quantum Leap is not responsible for payment gateway failures or delays beyond its control.</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-sm">4</span>
-                                User Responsibility
-                            </h2>
-                            <div className="pl-11 space-y-4">
-                                <p>You are solely responsible for how you apply the knowledge, skills, or insights gained from this platform.</p>
-                                <p>
-                                    Quantum Leap, its founders, instructors, or affiliates shall not be held liable for any academic, professional, financial, or personal outcomes resulting from the use or misuse of the content.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-3">
-                                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-sm">5</span>
-                                Governing Law
-                            </h2>
-                            <div className="pl-11 space-y-4">
-                                <p>
-                                    Your use of this website/app and any dispute arising out of such use shall be governed by and construed in accordance with the <strong>laws of India</strong>, subject to the jurisdiction of the appropriate courts.
-                                </p>
-                            </div>
-                        </div>
-                    </motion.section>
-
-                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <h3 className="text-lg font-bold text-slate-900 mb-2">Acceptance of Terms</h3>
-                        <p className="text-slate-600">
-                            By continuing to use this platform, you confirm that you have read, understood, and agreed to these terms and conditions in full.
-                        </p>
+                    <div className="prose prose-slate max-w-none">
+                        {data?.content ? renderContent(data.content) : (
+                            <p className="text-slate-500 italic">No terms and conditions content available yet.</p>
+                        )}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

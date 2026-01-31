@@ -13,6 +13,7 @@ const Simulations = lazy(() => import("./pages/Simulations"));
 const Courses = lazy(() => import("./pages/Courses"));
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const Disclaimer = lazy(() => import("./pages/Disclaimer"));
 const AdminDashboard = lazy(() => import("./components/admin/AdminDashboard"));
 
@@ -78,6 +79,14 @@ function App() {
                 element={
                   <Layout>
                     <PrivacyPolicy />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/terms"
+                element={
+                  <Layout>
+                    <TermsOfService />
                   </Layout>
                 }
               />
