@@ -14,6 +14,7 @@ import {
   Cpu,
   Rocket
 } from "lucide-react";
+import { PendulumSimulation, WaveSimulation } from "@/components/PhysicsSimulations";
 
 type Simulation = {
   id: string;
@@ -124,6 +125,38 @@ export default function Simulations() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto font-medium">
             Explore concepts through hands-on virtual labs and interactive models.
           </p>
+        </motion.div>
+
+        {/* Simulation Preview Section */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
+          className="bg-gradient-to-br from-primary/10 via-secondary/10 to-classroom-purple/10 p-8 rounded-3xl border-2 border-slate-200 mb-12"
+        >
+          <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">
+            What are Simulations? See Examples Below:
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-md">
+              <h4 className="text-sm font-bold text-slate-700 mb-3 text-center uppercase tracking-wide">
+                Simple Pendulum Motion
+              </h4>
+              <PendulumSimulation />
+              <p className="text-xs text-slate-500 mt-3 text-center">
+                Watch the pendulum swing back and forth - demonstrating periodic motion
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border-2 border-slate-900 shadow-md">
+              <h4 className="text-sm font-bold text-slate-700 mb-3 text-center uppercase tracking-wide">
+                Wave Motion
+              </h4>
+              <WaveSimulation />
+              <p className="text-xs text-slate-500 mt-3 text-center">
+                Observe wave propagation - showing oscillatory behavior
+              </p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Filters Section */}

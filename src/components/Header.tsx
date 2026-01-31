@@ -4,6 +4,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Page } from "../App";
 import { motion, AnimatePresence } from "framer-motion";
+import { throttle } from "@/utils/performance";
+import { useIsMobile } from "@/hooks/useMediaQuery";
 
 interface HeaderProps {
   currentPage?: Page;
@@ -14,16 +16,18 @@ export default function Header({ }: HeaderProps) {
   const { data } = useSiteSettings();
   const brand = data?.brand;
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Detect scroll for styling
+  // Detect scroll for styling with throttling for better performance
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
+    }, 100); // Throttle to 100ms
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -43,7 +47,7 @@ export default function Header({ }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${scrolled
-        ? "bg-white/85 backdrop-blur-xl shadow-sm border-slate-200/50 py-3"
+        ? "bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl shadow-sm border-slate-200/50 dark:border-slate-700/50 py-3"
         : "bg-transparent border-transparent py-5"
         }`}
     >
@@ -70,7 +74,7 @@ export default function Header({ }: HeaderProps) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-primary transition-colors duration-300"
+                className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50 group-hover:text-primary transition-colors duration-300"
               >
                 {brandName}
               </motion.span>
@@ -83,7 +87,7 @@ export default function Header({ }: HeaderProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm px-2 py-1.5 rounded-full border border-white/20 shadow-sm">
+          <nav className="hidden md:flex items-center gap-1 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm px-2 py-1.5 rounded-full border border-white/20 dark:border-slate-700/20 shadow-sm">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -91,8 +95,8 @@ export default function Header({ }: HeaderProps) {
                   key={item.path}
                   to={item.path}
                   className={`relative px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
-                    ? "text-primary bg-white shadow-sm ring-1 ring-slate-100"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                    ? "text-primary bg-white dark:bg-slate-700 shadow-sm ring-1 ring-slate-100 dark:ring-slate-600"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-50 hover:bg-white/60 dark:hover:bg-slate-700/60"
                     }`}
                 >
                   {item.name}

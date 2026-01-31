@@ -142,7 +142,7 @@ export default function Courses() {
           );
         })
         .sort((a, b) => (a.priority ?? 999) - (b.priority ?? 999))
-      : [];
+      : courses.filter(c => c.isActive === true).sort((a, b) => (a.priority ?? 999) - (b.priority ?? 999));
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 bg-surface-light relative">
@@ -224,11 +224,10 @@ export default function Courses() {
           </div>
         </motion.div>
 
-        {/* Empty State */}
-        {(!board || !classLevel) && (
-          <div className="text-center py-12 text-slate-400">
-            <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-            <p>Select options above to reveal courses</p>
+        {/* Info Message */}
+        {(!board || !classLevel) && filteredCourses.length > 0 && (
+          <div className="text-center py-6 text-slate-600 bg-primary/5 rounded-xl border border-primary/20">
+            <p className="font-medium">📚 Showing all available courses. Use filters above to narrow your search.</p>
           </div>
         )}
 

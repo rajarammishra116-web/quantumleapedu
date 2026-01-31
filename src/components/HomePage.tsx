@@ -3,13 +3,20 @@ import { contentData } from "../data/contentData";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Page } from "../App";
+import { OrbitSimulation } from "./PhysicsSimulations";
+import { useContentData } from "@/hooks/useContentData";
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
 }
 
 export default function HomePage({ }: HomePageProps) {
-  const { hero, features, about } = contentData;
+  const { homepageContent } = useContentData();
+
+  // Use Firestore content if available, otherwise fall back to contentData
+  const hero = homepageContent?.hero || contentData.hero;
+  const features = homepageContent?.features || contentData.features;
+  const about = contentData.about;
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -93,6 +100,16 @@ export default function HomePage({ }: HomePageProps) {
           >
             <BrainCircuit size={64} strokeWidth={1} />
           </motion.div>
+
+          {/* Physics Simulation: Orbit (Bottom Right) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.8 }}
+            className="absolute bottom-[15%] right-[8%] hidden lg:block opacity-60"
+          >
+            <OrbitSimulation />
+          </motion.div>
         </div>
 
         <motion.div
@@ -102,11 +119,13 @@ export default function HomePage({ }: HomePageProps) {
           className="max-w-4xl mx-auto"
         >
           {/* Tagline - Handwritten Style */}
-          <motion.div variants={fadeInUp} className="mb-6">
-            <span className="inline-block px-4 py-2 rounded-full border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-sm tracking-wide uppercase">
-              {hero.tagline}
-            </span>
-          </motion.div>
+          {hero.tagline && (
+            <motion.div variants={fadeInUp} className="mb-6">
+              <span className="inline-block px-4 py-2 rounded-full border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-sm tracking-wide uppercase">
+                {hero.tagline}
+              </span>
+            </motion.div>
+          )}
 
           {/* Headline */}
           <motion.h1
@@ -139,7 +158,7 @@ export default function HomePage({ }: HomePageProps) {
               Start Learning <ArrowRight size={20} />
             </Link>
             <Link
-              to="/about"
+              to="/courses"
               className="px-8 py-4 bg-white text-slate-900 font-bold rounded-xl shadow-[6px_6px_0px_0px_rgba(203,213,225,1)] hover:shadow-[2px_2px_0px_0px_rgba(203,213,225,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all border-2 border-slate-200"
             >
               Learn More

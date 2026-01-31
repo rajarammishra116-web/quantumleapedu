@@ -1,9 +1,13 @@
 import { contentData } from "../data/contentData";
 import { motion, Variants } from "framer-motion";
 import { Lightbulb, Target, Users, Rocket, Calculator, Globe, Atom, Hourglass, Dna, Sparkles } from "lucide-react";
+import { useContentData } from "@/hooks/useContentData";
 
 export default function AboutUs() {
-  const { about } = contentData;
+  const { aboutContent } = useContentData();
+
+  // Use Firestore content if available, otherwise fall back to contentData
+  const about = aboutContent || contentData.about;
 
   const container: Variants = {
     hidden: { opacity: 0 },

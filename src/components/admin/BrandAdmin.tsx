@@ -24,6 +24,7 @@ export default function BrandAdmin() {
     phone: "",
     address: "",
     instagram: "",
+    facebook: "",
     telegram: "",
     youtube: "",
   });
@@ -40,6 +41,7 @@ export default function BrandAdmin() {
       phone: data.phone ?? "",
       address: data.address ?? "",
       instagram: data.instagram ?? "",
+      facebook: data.facebook ?? "",
       telegram: data.telegram ?? "",
       youtube: data.youtube ?? "",
     });
@@ -65,6 +67,7 @@ export default function BrandAdmin() {
 
         // ✅ normalized social links
         instagram: normalizeUrl(form.instagram, "https://instagram.com/"),
+        facebook: normalizeUrl(form.facebook, "https://facebook.com/"),
         telegram: normalizeUrl(form.telegram, "https://t.me/"),
         youtube: normalizeUrl(form.youtube, "https://youtube.com/"),
       });
