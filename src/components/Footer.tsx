@@ -30,7 +30,7 @@ export default function Footer({ }: FooterProps) {
 
 
   return (
-    <footer className="relative bg-slate-950 text-slate-300 pt-16 pb-8 mt-24 border-t border-slate-900 overflow-hidden">
+    <footer className="relative bg-slate-950 text-slate-300 pt-16 pb-8 border-t border-slate-900 overflow-hidden">
       {/* Decorative gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
 

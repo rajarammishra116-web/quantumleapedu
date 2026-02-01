@@ -14,11 +14,13 @@ export default function PrivacyPolicy() {
   if (!data) return null;
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{data.title}</h1>
-      <p className="whitespace-pre-line text-gray-700">
-        {data.content}
-      </p>
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 text-slate-900">{data.title}</h1>
+        <p className="whitespace-pre-line text-slate-700 leading-relaxed">
+          {data.content}
+        </p>
+      </div>
     </div>
   );
 }
