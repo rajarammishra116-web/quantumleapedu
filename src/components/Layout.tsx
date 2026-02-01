@@ -52,22 +52,22 @@ export default function Layout({ children }: LayoutProps) {
 
     return (
         <ToastProvider>
-            <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 relative overflow-x-hidden transition-colors duration-300">
+            <div className="flex flex-col min-h-screen bg-slate-50 relative overflow-x-hidden transition-colors duration-300">
                 {/* Scroll Progress Indicator */}
                 <ScrollProgress />
 
-                {/* Background Gradients - Hidden on mobile for performance, dark mode aware */}
+                {/* Background Gradients - Hidden on mobile for performance */}
                 {!isMobile && (
                     <div className="fixed inset-0 z-0 pointer-events-none">
-                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 dark:bg-primary/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-70 animate-blob"></div>
-                        <div className="absolute top-[-5%] right-[-5%] w-[35%] h-[35%] bg-secondary/20 dark:bg-secondary/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-70 animate-blob animation-delay-2000"></div>
-                        <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-classroom-purple/20 dark:bg-classroom-purple/10 blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen opacity-70 animate-blob animation-delay-4000"></div>
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full mix-blend-multiply opacity-70 animate-blob"></div>
+                        <div className="absolute top-[-5%] right-[-5%] w-[35%] h-[35%] bg-secondary/20 blur-[120px] rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-2000"></div>
+                        <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-classroom-purple/20 blur-[120px] rounded-full mix-blend-multiply opacity-70 animate-blob animation-delay-4000"></div>
                     </div>
                 )}
 
                 <Header currentPage={getCurrentPage()} onNavigate={handleNavigate} />
 
-                <main className="flex-grow pt-24 z-10 relative">
+                <main className="flex-grow pt-24 z-10 relative bg-slate-50">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={location.pathname}
